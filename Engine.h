@@ -43,17 +43,18 @@ struct Engine {
     // Deletes a record logically (marks as deleted and updates indexes)
     // Returns true if deletion succeeded.
     bool deleteById(int id) {
-        int* ridPtr = idIndex.find(id);
-        if (!ridPtr) return false;
-        int rid = *ridPtr;
-        if (rid < 0 || rid >= (int)heap.size()) return false;
-        if (heap[rid].deleted) return false;
-        heap[rid].deleted = true;
-        string key = toLower(heap[rid].last);
-        auto vecPtr = lastIndex.find(key);
-        if (vecPtr) {
-            auto& vec = *vecPtr;
-            vec.erase(std::remove(vec.begin(), vec.end(), rid), vec.end());
+        int* rid = idIndex.find(id);
+        if (!rid) return false;
+        Record& rec = heap[*rid];
+        if (rec.deleted) return false;
+        rec.deleted = true;
+        string lastLower = toLower(rec.last);
+        vector<int>* vptr = lastIndex.find(lastLower);
+        if (vptr) {
+            auto& vec = *vptr;
+            auto it = remove(vec.begin(), vec.end(), *rid);
+            vec.erase(it, vec.end());
+            if (vec.empty()) lastIndex.erase(lastLower);
         }
         return true;
     }
