@@ -1,0 +1,1 @@
+the main challenge i faced was the commits, as i had trouble figuring it out for a while. Something i learned, would be the difference between soft and physical deletion.
