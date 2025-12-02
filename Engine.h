@@ -3,6 +3,7 @@
 
 #include <iostream>   
 #include <vector>     
+#include <algorithm>
 #include "BST.h"      
 #include "Record.h"
 //add header files as needed
