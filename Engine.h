@@ -25,13 +25,13 @@ struct Engine {
     BST<string, vector<int>> lastIndex;   // index by last name (can have duplicates)
 
 
-    int insertRecord(const Record &recIn) {
-        int rid = (int)heap.size();  
+    int insertRecord(const Record& recIn) {
+        int rid = (int)heap.size();
         heap.push_back(recIn);
         idIndex.insert(recIn.id, rid);
         string key = toLower(recIn.last);
         auto vecPtr = lastIndex.find(key);
-        if (vecPtr) {  
+        if (vecPtr) {
             vecPtr->push_back(rid);
         }
         else {
@@ -56,7 +56,7 @@ struct Engine {
     // Finds a record by student ID.
     // Returns a pointer to the record, or nullptr if not found.
     // Outputs the number of comparisons made in the search.
-    const Record *findById(int id, int &cmpOut) {
+    const Record* findById(int id, int& cmpOut) {
         idIndex.resetMetrics();
         int* ridPtr = idIndex.find(id);
         cmpOut = idIndex.comparisons;
@@ -71,7 +71,7 @@ struct Engine {
 
     // Returns all records with ID in the range [lo, hi].
     // Also reports the number of key comparisons performed.
-    vector<const Record *> rangeById(int lo, int hi, int &cmpOut) {
+    vector<const Record*> rangeById(int lo, int hi, int& cmpOut) {
         idIndex.resetMetrics();
         vector<const Record*> out;
 
@@ -86,7 +86,7 @@ struct Engine {
 
     // Returns all records whose last name begins with a given prefix.
     // Case-insensitive using lowercase comparison.
-    vector<const Record *> prefixByLast(const string &prefix, int &cmpOut) {
+    vector<const Record*> prefixByLast(const string& prefix, int& cmpOut) {
         lastIndex.resetMetrics();
         vector<const Record*> out;
         string p = toLower(prefix);
@@ -102,7 +102,6 @@ struct Engine {
             });
         cmpOut = lastIndex.comparisons;
         return out;
-    }
     }
 };
 
