@@ -43,14 +43,20 @@ struct Engine {
     // Deletes a record logically (marks as deleted and updates indexes)
     // Returns true if deletion succeeded.
     bool deleteById(int id) {
-        auto ridPtr = idIndex.find(id);
-        if (!ridPtr) return false;
-
-        int rid = *ridPtr;
-        if (rid < 0 || rid >= (int)heap.size()) return false;
-        if (heap[rid].deleted) return false;
-        heap[rid].deleted = true;
-        return true;
+    int *ridPtr = idIndex.find(id);
+    if (!ridPtr) return false;
+    int rid = *ridPtr;
+    if (rid < 0 || rid >= (int)heap.size()) return false;
+    if (heap[rid].deleted) return false;
+    heap[rid].deleted = true;
+    idIndex.erase(id);
+    string key = toLower(heap[rid].last);
+    auto vecPtr = lastIndex.find(key);
+    if (vecPtr) {
+        auto &vec = *vecPtr;
+        vec.erase(remove(vec.begin(), vec.end(), rid), vec.end());
+    }
+    return true;
     }
 
     // Finds a record by student ID.
